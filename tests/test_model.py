@@ -42,7 +42,9 @@ def test_forward_shapes() -> None:
     assert outputs["image_embeds"].shape == (2, 16)
     assert outputs["logits_per_text"].shape == (2, 2)
     assert outputs["logits_per_image"].shape == (2, 2)
-    assert torch.allclose(outputs["logits_per_image"], outputs["logits_per_text"].t(), atol=1e-5)
+    assert torch.allclose(
+        outputs["logits_per_image"], outputs["logits_per_text"].t(), atol=1e-5
+    )
 
 
 def test_position_ids_are_persistent_for_hf_compatibility() -> None:
@@ -99,8 +101,14 @@ def test_from_pretrained_local_safetensors(tmp_path, monkeypatch) -> None:
         del _model_dir
         return model.state_dict()
 
-    monkeypatch.setattr(clip_model_module, "_ensure_model_files", fake_ensure_model_files)
-    monkeypatch.setattr(clip_model_module, "_load_safetensors_state_dict", fake_load_safetensors_state_dict)
+    monkeypatch.setattr(
+        clip_model_module, "_ensure_model_files", fake_ensure_model_files
+    )
+    monkeypatch.setattr(
+        clip_model_module,
+        "_load_safetensors_state_dict",
+        fake_load_safetensors_state_dict,
+    )
 
     loaded = CLIPModel.from_pretrained(model_dir)
     for name, value in model.state_dict().items():
@@ -130,8 +138,14 @@ def test_from_pretrained_passes_cache_options(tmp_path, monkeypatch) -> None:
         del _model_dir
         return model.state_dict()
 
-    monkeypatch.setattr(clip_model_module, "_ensure_model_files", fake_ensure_model_files)
-    monkeypatch.setattr(clip_model_module, "_load_safetensors_state_dict", fake_load_safetensors_state_dict)
+    monkeypatch.setattr(
+        clip_model_module, "_ensure_model_files", fake_ensure_model_files
+    )
+    monkeypatch.setattr(
+        clip_model_module,
+        "_load_safetensors_state_dict",
+        fake_load_safetensors_state_dict,
+    )
     monkeypatch.setattr(clip_model_module.CLIPConfig, "from_json_file", lambda _: cfg)
 
     custom_cache_dir = tmp_path / "my-cache"
@@ -148,10 +162,14 @@ def test_from_pretrained_passes_cache_options(tmp_path, monkeypatch) -> None:
     assert seen["only_local_files"] is True
 
 
-def test_ensure_model_files_only_local_files_blocks_download(tmp_path, monkeypatch) -> None:
+def test_ensure_model_files_only_local_files_blocks_download(
+    tmp_path, monkeypatch
+) -> None:
     def fail_download(url, path):
         del url, path
-        raise AssertionError("download should not be attempted when only_local_files=True")
+        raise AssertionError(
+            "download should not be attempted when only_local_files=True"
+        )
 
     monkeypatch.setattr(clip_model_module, "_download", fail_download)
 
@@ -166,7 +184,9 @@ def test_ensure_model_files_only_local_files_blocks_download(tmp_path, monkeypat
 def test_ensure_model_files_uses_hf_cache_layout(tmp_path, monkeypatch) -> None:
     model_id = "openai/clip-vit-large-patch14"
     revision = "main"
-    expected_dir = tmp_path / "models--openai--clip-vit-large-patch14" / "snapshots" / "main"
+    expected_dir = (
+        tmp_path / "models--openai--clip-vit-large-patch14" / "snapshots" / "main"
+    )
     expected_dir.mkdir(parents=True)
 
     config_path = expected_dir / "config.json"

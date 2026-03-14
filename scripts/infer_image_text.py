@@ -23,7 +23,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--model-id", default="openai/clip-vit-large-patch14")
     parser.add_argument("--revision", default="main")
-    parser.add_argument("--cache-dir", default=str(Path.home() / ".cache" / "nanoclip" / "hf"))
+    parser.add_argument(
+        "--cache-dir", default=str(Path.home() / ".cache" / "nanoclip" / "hf")
+    )
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--only-local-files", action="store_true")
     return parser.parse_args()
@@ -62,7 +64,9 @@ def main() -> None:
     best_idx = int(torch.argmax(probs).item())
     print(f"Best match: {texts[best_idx]}")
     print("\nScores:")
-    for text, score in sorted(zip(texts, probs.tolist()), key=lambda item: item[1], reverse=True):
+    for text, score in sorted(
+        zip(texts, probs.tolist()), key=lambda item: item[1], reverse=True
+    ):
         print(f"{score:.6f}\t{text}")
 
 

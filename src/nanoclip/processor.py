@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import urllib.request
 from pathlib import Path
-from typing import Any
 
 import numpy as np
 import torch
@@ -44,7 +43,9 @@ class NanoCLIPProcessor:
         )
 
         tokenizer = Tokenizer.from_file(str(snapshot_dir / "tokenizer.json"))
-        with (snapshot_dir / "preprocessor_config.json").open("r", encoding="utf-8") as handle:
+        with (snapshot_dir / "preprocessor_config.json").open(
+            "r", encoding="utf-8"
+        ) as handle:
             image_cfg = json.load(handle)
 
         size_cfg = image_cfg["size"]
@@ -93,7 +94,9 @@ class NanoCLIPProcessor:
             out["pixel_values"] = self._encode_images(images)
         return out
 
-    def _encode_text(self, text: str | list[str], padding: bool) -> dict[str, torch.Tensor]:
+    def _encode_text(
+        self, text: str | list[str], padding: bool
+    ) -> dict[str, torch.Tensor]:
         texts = [text] if isinstance(text, str) else text
         encodings = self.tokenizer.encode_batch(texts)
         sequences = [enc.ids for enc in encodings]
@@ -151,12 +154,16 @@ class NanoCLIPProcessor:
             padded = np.zeros((pad_h, pad_w, 3), dtype=arr.dtype)
             top_pad = int(np.ceil((pad_h - new_height) / 2.0))
             left_pad = int(np.ceil((pad_w - new_width) / 2.0))
-            padded[top_pad : top_pad + new_height, left_pad : left_pad + new_width, :] = arr
+            padded[
+                top_pad : top_pad + new_height, left_pad : left_pad + new_width, :
+            ] = arr
             top = top + top_pad
             left = left + left_pad
             bottom = top + crop_h
             right = left + crop_w
-            arr = padded[max(0, top) : min(pad_h, bottom), max(0, left) : min(pad_w, right), :]
+            arr = padded[
+                max(0, top) : min(pad_h, bottom), max(0, left) : min(pad_w, right), :
+            ]
 
         arr = arr.astype(np.float32) * (1.0 / 255.0)
         mean = np.asarray(self.image_mean, dtype=np.float32).reshape(1, 1, 3)
