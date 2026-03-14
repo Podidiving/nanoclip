@@ -4,6 +4,14 @@ Minimal pure-PyTorch CLIP implementation compatible with OpenAI CLIP weights on 
 
 ## Install
 
+From PyPI (pip):
+
+```bash
+pip install nanoclip
+```
+
+From source (uv):
+
 ```bash
 uv sync
 ```
