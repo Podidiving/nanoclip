@@ -1,0 +1,29 @@
+[project]
+name = "nanoclip"
+version = "0.1.0"
+description = "Minimal pure-PyTorch CLIP implementation compatible with OpenAI CLIP safetensors."
+readme = "README.md"
+authors = [
+    { name = "aleks", email = "podidiving@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.4.3",
+    "safetensors>=0.7.0",
+    "torch>=2.10.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.7,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
+transformers = [
+    "transformers>=5.3.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
