@@ -41,6 +41,26 @@ with torch.no_grad():
 
 Set `only_local_files=True` to disallow downloads and require files to already exist in `cache_dir`.
 
+## Quick Inference
+
+```bash
+uv run python scripts/infer_image_text.py \
+  --image assets/image.jpg \
+  --texts "image of a cat" \
+  --texts "image of a dog" \
+  --cache-dir ~/.cache/nanoclip/hf
+```
+
+Expected output:
+
+```text
+Best match: image of a cat
+
+Scores:
+0.999235	image of a cat
+0.000765	image of a dog
+```
+
 ## Tests
 
 ```bash
@@ -56,18 +76,6 @@ uv run --group transformers python scripts/compare_nano_with_transformers.py \
 ```
 
 The script loads both models from the same `--cache-dir` root and asserts embeddings/logits are numerically close.
-
-## Image-Text Inference
-
-```bash
-uv run python scripts/infer_image_text.py \
-  --image /path/to/image.jpg \
-  --texts "a photo of a cat" "a photo of a dog" "a landscape" \
-  --model-id openai/clip-vit-large-patch14 \
-  --cache-dir ~/.cache/nanoclip/hf
-```
-
-This preprocesses the image and texts, runs inference with `nanoclip`, and prints the closest text plus full ranking.
 
 ## Compare Processor with Transformers
 
