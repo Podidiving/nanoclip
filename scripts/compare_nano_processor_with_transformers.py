@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    cache_dir = Path(args.cache_dir)
+    cache_dir = Path(args.cache_dir).expanduser()
 
     np.random.seed(args.seed)
     image = Image.fromarray(

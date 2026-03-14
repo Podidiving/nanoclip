@@ -30,7 +30,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     device = torch.device(args.device)
-    cache_dir = Path(args.cache_dir)
+    cache_dir = Path(args.cache_dir).expanduser()
 
     torch.manual_seed(args.seed)
     if args.model_path is not None:

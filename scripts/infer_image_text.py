@@ -32,7 +32,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     device = torch.device(args.device)
-    cache_dir = Path(args.cache_dir)
+    cache_dir = Path(args.cache_dir).expanduser()
     texts = [item for group in args.texts for item in group]
 
     model = CLIPModel.from_pretrained(
